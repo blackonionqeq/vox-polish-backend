@@ -60,6 +60,9 @@ pnpm install
 
 ```bash
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/glossary"
+# 用于 Gemini 语音转文字
+GEMINI_BASE_URL="https://generativelanguage.googleapis.com"
+GEMINI_FLASH_API_KEY="your_api_key_here"
 ```
 
 ### 导入（可重复执行）
@@ -98,6 +101,37 @@ pnpm run import:words:prune
 ```bash
 pnpm run dev
 ```
+
+## LLM 语音转文字工具
+
+项目集成了基于 Google Gemini 的语音转文字功能，用于将 MP3 音频转写为带有时间戳的 JSON 格式，方便后续生成字幕。
+
+### 1) 基础转录脚本 (`scripts/llm-transcipt.ts`)
+
+这是一个直接在 Node.js 环境下运行的转录工具。
+
+- **逻辑**：读取项目根目录下的 `test.mp3`，将其转换为 Base64，发送给 Gemini API，并将结果保存到 `llm-transcript-result.json`。
+- **配置**：需在 `.env` 中配置 `GEMINI_BASE_URL` (Gemini API 地址) 和 `GEMINI_FLASH_API_KEY`。
+- **使用方法**：
+  ```bash
+  pnpm run llm:transcript
+  ```
+
+### 2) 前端调试工具 (`scripts/llm-transcript-debug.js`)
+
+为了方便排查 API 请求封包、测试不同音频文件或在不带 Node 环境的浏览器中调试，提供了一个轻量级的 Web 调试页面。
+
+- **特点**：
+  - **可视化界面**：提供文件选择器、Prompt 编辑器和 API 配置项。
+  - **客户端发起请求**：所有 API 请求均由浏览器直接发起，可利用 `F12 检查 -> Network` 监控完整的 HTTP 报文。
+  - **导出功能**：支持将转录得到的 JSON 结果直接下载到本地。
+  - **连通性测试**：支持不选择文件直接发送 Prompt，用于快速排查 API Key 或网络连通性问题。
+- **使用方法**：
+  1. 启动调试服务器：
+     ```bash
+     pnpm run llm:transcript:debug
+     ```
+  2. 在浏览器访问：`http://localhost:3001`
 
 ## 查询示例（围绕“日译中 + tags”）
 

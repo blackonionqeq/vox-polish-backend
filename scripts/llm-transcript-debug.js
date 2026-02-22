@@ -5,7 +5,7 @@ dotenv.config();
 
 const fastify = Fastify({ logger: true });
 
-const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || "";
+const GEMINI_BASE_URL = process.env.GEMINI_BASE_URL || "";
 const GEMINI_FLASH_API_KEY = process.env.GEMINI_FLASH_API_KEY || "";
 
 const googleFlashModels = [
@@ -56,7 +56,7 @@ fastify.get("/", async (request, reply) => {
     <div class="card">
         <div class="form-group">
             <label for="baseUrl">API Base URL:</label>
-            <input type="text" id="baseUrl" value="${OPENAI_BASE_URL}">
+            <input type="text" id="baseUrl" value="${GEMINI_BASE_URL}">
         </div>
         <div class="form-group">
             <label for="apiKey">API Key:</label>

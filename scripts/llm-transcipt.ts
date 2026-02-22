@@ -8,7 +8,7 @@ dotenv.config()
 
 const base64Audio = fs.readFileSync("./test.mp3", { encoding: "base64" })
 
-const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL;
+const GEMINI_BASE_URL = process.env.GEMINI_BASE_URL;
 const GEMINI_FLASH_API_KEY = process.env.GEMINI_FLASH_API_KEY;
 
 
@@ -48,7 +48,7 @@ async function generateTranscriptRequest(params: {
         }]
     })
     console.time("generateTranscriptRequest")
-    const response = await fetch(`${OPENAI_BASE_URL}/v1beta/models/${params.model}:generateContent`, {
+    const response = await fetch(`${GEMINI_BASE_URL}/v1beta/models/${params.model}:generateContent`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
