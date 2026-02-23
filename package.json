@@ -8,6 +8,7 @@
     "dev": "tsx src/server.ts",
     "llm:transcript": "tsx scripts/llm-transcipt.ts",
     "llm:transcript:debug": "tsx scripts/llm-transcript-debug.js",
+    "llm:proofreading": "tsx scripts/llm-proofreading.ts",
     "import:words": "tsx scripts/import_genshin_words.ts --json genshin_words.json",
     "import:words:prune": "tsx scripts/import_genshin_words.ts --json genshin_words.json --prune"
   },

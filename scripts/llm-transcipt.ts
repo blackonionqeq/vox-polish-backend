@@ -1,4 +1,4 @@
-// ffmpeg convert mp4 to mp3: ffmpeg -i input.mp4 -vn -acodec libmp3lame output.mp3
+// ffmpeg convert mp4 to mp3: ffmpeg -i test.mp4 -vn -acodec libmp3lame test.mp3
 
 
 import dotenv from "dotenv";
@@ -27,7 +27,9 @@ const googleProModels = [
 const defaultModel = googleFlashModels[0]
 
 const defaultPrompt = `
-    帮我语音转文字，不用翻译，只需转为文字和时间即可，以便后续生成字幕。不用多余的解释，直接返回json格式。
+    帮我把语音转文字，不用翻译，不用翻译，不用翻译，只需转为文字、起止时间和说话人即可，以便后续生成字幕文件。不用多余的解释，直接返回给定的json格式。
+    注意：
+    1.字幕起止时间的起点以音频为准，例如第一句话在第三秒处，则from为3，to为第一句话结束的时间
 `
 
 // generate a transcript request to gemini
@@ -45,7 +47,28 @@ async function generateTranscriptRequest(params: {
                     inlineData: { mimeType: "audio/mp3", data: base64Audio }
                 }
             ]
-        }]
+        }],
+        generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: "object",
+                properties: {
+                    transcript_list: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                from: { type: "number" },
+                                to: { type: "number" },
+                                speaker: { type: "string" },
+                                text: { type: "string" },
+                            }
+                        }
+                    }
+                },
+                required: ["transcript_list"]
+            }
+        }
     })
     console.time("generateTranscriptRequest")
     const response = await fetch(`${GEMINI_BASE_URL}/v1beta/models/${params.model}:generateContent`, {
