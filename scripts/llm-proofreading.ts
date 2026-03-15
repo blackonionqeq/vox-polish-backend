@@ -50,7 +50,27 @@ type TranscriptItem = {
 
 type TranscriptPayload = {
   transcript_list: TranscriptItem[];
+  likes_proper_nouns?: string[];
 };
+
+function getProperNounsPromptSection(transcript: TranscriptPayload): string[] {
+  const properNouns = (transcript.likes_proper_nouns ?? [])
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (properNouns.length === 0) {
+    return [];
+  }
+
+  return [
+    "",
+    "下面这些词是转写阶段标记出的疑似专有名词，请在润色时重点处理：",
+    "- 结合上下文判断它们是否应修正为更准确、更统一的专有名词写法。",
+    "- 如果能确定标准写法，请在最终字幕中统一替换。",
+    "- 如果仍无法确定，请保留原文，不要臆造。",
+    `疑似专有名词：${properNouns.join("、")}`,
+  ];
+}
 
 function parseTranscriptPayloadFromFile(raw: string): TranscriptPayload {
   const top = JSON.parse(raw);
@@ -76,17 +96,20 @@ function parseTranscriptPayloadFromFile(raw: string): TranscriptPayload {
 async function generateSrtByGemini(params: { model: string; transcript: TranscriptPayload }) {
   const baseUrl = mustGetEnv("GEMINI_BASE_URL");
   const apiKey = mustGetEnv("GEMINI_PRO_API_KEY");
+  const properNounsPromptSection = getProperNounsPromptSection(params.transcript);
 
   const prompt = [
     "你是专业字幕润色与排版助手。",
     "我会给你一段语音转写结果 JSON（transcript_list）。请完成：",
     "- 保持原意，不翻译；纠正错别字与标点；让口语更自然但不要过度改写。",
+    "- 如果提供了疑似专有名词列表，请优先结合上下文校对并统一这些词的写法。",
     "- 合理断句，避免一条字幕过长；必要时可把同一条拆成多条，但时间必须落在原区间内且不重叠。",
     "- 输出必须是严格的 SRT 格式：",
     "  1) 序号从 1 开始递增",
     "  2) 时间格式为 HH:MM:SS,mmm --> HH:MM:SS,mmm",
     "  3) 每条字幕内容为单行或双行，建议第一行加说话人前缀：例如「【男孩1】xxx」",
     "- 不要输出任何解释、不要输出 JSON、不要输出多余的 markdown，只输出 SRT 正文。",
+    ...properNounsPromptSection,
     "",
     "下面是 transcript JSON：",
     JSON.stringify(params.transcript),
