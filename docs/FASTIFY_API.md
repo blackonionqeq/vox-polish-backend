@@ -26,7 +26,7 @@ pnpm run dev
 ]
 ```
 
-实现见：[`src/routes/tags.ts`](src/routes/tags.ts)
+实现见：[`src/modules/glossary/routes/tags.ts`](src/modules/glossary/routes/tags.ts)
 
 ### `GET /glossary/lookup?ja=...`
 
@@ -44,12 +44,12 @@ pnpm run dev
 - `matched_by = "ja"`：命中 `glossary.ja = $1`
 - `matched_by = "variant"`：命中 `glossary_variant.value = $1`（`lang_code='ja'`）
 
-实现见：[`src/routes/lookup.ts`](src/routes/lookup.ts)
+实现见：[`src/modules/glossary/routes/lookup.ts`](src/modules/glossary/routes/lookup.ts)
 
 ## 相关文件
 
-- 服务入口：[`src/server.ts`](src/server.ts)
-- 数据库连接池：[`src/db/pool.ts`](src/db/pool.ts)
-- tags 路由：[`src/routes/tags.ts`](src/routes/tags.ts)
-- lookup 路由：[`src/routes/lookup.ts`](src/routes/lookup.ts)
+- 服务入口：[`src/app/server.ts`](src/app/server.ts)
+- 数据库连接池：[`src/infra/db/pool.ts`](src/infra/db/pool.ts)
+- tags 路由：[`src/modules/glossary/routes/tags.ts`](src/modules/glossary/routes/tags.ts)
+- lookup 路由：[`src/modules/glossary/routes/lookup.ts`](src/modules/glossary/routes/lookup.ts)
 

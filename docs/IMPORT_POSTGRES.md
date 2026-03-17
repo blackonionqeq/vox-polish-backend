@@ -39,7 +39,7 @@ pnpm run import:words:prune
 ## 5) 直接运行脚本（可指定文件和 DSN）
 
 ```bash
-pnpm tsx scripts/import_genshin_words.ts --json genshin_words.json --dsn "postgresql://postgres:postgres@localhost:5432/glossary"
+pnpm tsx scripts/data/import_genshin_words.ts --json genshin_words.json --dsn "postgresql://postgres:postgres@localhost:5432/glossary"
 ```
 
 ## 6) 示例查询
@@ -68,7 +68,7 @@ HAVING COUNT(DISTINCT t.name) = 2;
 
 ## 7) 后续接 Fastify 的建议
 
-- 建议把 `scripts/import_genshin_words.ts` 里的查询逻辑拆成 `src/db/` 下的函数。
+- 建议把 `scripts/data/import_genshin_words.ts` 里的查询逻辑拆成 `src/infra/db/` 下的函数。
 - Fastify 里先做两个 API：
   - `GET /tags`：返回可选 tag 列表
   - `POST /glossary/by-tags`：入参为 tag 数组 + 匹配模式（`any` / `all`）

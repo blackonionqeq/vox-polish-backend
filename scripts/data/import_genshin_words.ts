@@ -140,7 +140,7 @@ function extractTags(item: GlossaryItem): string[] {
 async function ensureSchema(client: Client): Promise<void> {
   const currentFile = fileURLToPath(import.meta.url);
   const currentDir = path.dirname(currentFile);
-  const schemaPath = path.resolve(currentDir, "../schema_postgres.sql");
+  const schemaPath = path.resolve(currentDir, "../../schema_postgres.sql");
   const sql = await fs.readFile(schemaPath, "utf-8");
   await client.query(sql);
 }

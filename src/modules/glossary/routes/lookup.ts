@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 
-import { pool } from "../db/pool.js";
+import { pool } from "../../../infra/db/pool.js";
 
 type LookupQuery = {
   ja?: string;
@@ -61,4 +61,3 @@ export async function lookupRoutes(fastify: FastifyInstance): Promise<void> {
     return reply.code(404).send({ error: "Not found." });
   });
 }
-

@@ -1,3 +1,6 @@
 .env
+.github/
+.specify/
+.vscode/
 node_modules
 genshin_words.json

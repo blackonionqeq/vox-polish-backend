@@ -1,8 +1,8 @@
 import Fastify from "fastify";
 
-import { closePool } from "./db/pool.js";
-import { lookupRoutes } from "./routes/lookup.js";
-import { tagsRoutes } from "./routes/tags.js";
+import { closePool } from "../infra/db/pool.js";
+import { lookupRoutes } from "../modules/glossary/routes/lookup.js";
+import { tagsRoutes } from "../modules/glossary/routes/tags.js";
 
 async function main(): Promise<void> {
   const fastify = Fastify({ logger: true });
@@ -24,4 +24,3 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
-

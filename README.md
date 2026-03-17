@@ -71,7 +71,7 @@ GEMINI_FLASH_API_KEY="your_api_key_here"
 pnpm run import:words
 ```
 
-脚本 `scripts/import_genshin_words.ts` 的行为：
+脚本 `scripts/data/import_genshin_words.ts` 的行为：
 
 - 自动执行 `schema_postgres.sql`（表不存在时创建）
 - `glossary` 主表按 `id` 做 upsert
@@ -85,16 +85,16 @@ pnpm run import:words
 pnpm run import:words:prune
 ```
 
-更多细节见 `IMPORT_POSTGRES.md`。
+更多细节见 `docs/IMPORT_POSTGRES.md`。
 
 ## Fastify API（已实现）
 
-已实现两个最小可用接口用于查询 glossary 数据库，详细说明见 [`FASTIFY_API.md`](FASTIFY_API.md)。
+已实现两个最小可用接口用于查询 glossary 数据库，详细说明见 [`docs/FASTIFY_API.md`](docs/FASTIFY_API.md)。
 
 - `GET /tags`：返回所有 tags（含使用次数）  
-  - 实现：[`src/routes/tags.ts`](src/routes/tags.ts)
+  - 实现：[`src/modules/glossary/routes/tags.ts`](src/modules/glossary/routes/tags.ts)
 - `GET /glossary/lookup?ja=...`：输入 `ja` 返回对应 `zh_cn`（先精确命中 `glossary.ja`，失败再用 `variants.ja` 兜底）  
-  - 实现：[`src/routes/lookup.ts`](src/routes/lookup.ts)
+  - 实现：[`src/modules/glossary/routes/lookup.ts`](src/modules/glossary/routes/lookup.ts)
 
 启动服务：
 
@@ -106,18 +106,18 @@ pnpm run dev
 
 项目集成了基于 Google Gemini 的语音转文字功能，用于将 MP3 音频转写为带有时间戳的 JSON 格式，方便后续生成字幕。
 
-### 1) 基础转录脚本 (`scripts/llm-transcipt.ts`)
+### 1) 基础转录脚本 (`scripts/llm/transcript.ts`)
 
 这是一个直接在 Node.js 环境下运行的转录工具。
 
-- **逻辑**：读取项目根目录下的 `test.mp3`，将其转换为 Base64，发送给 Gemini API，并将结果保存到 `llm-transcript-result.json`。
+- **逻辑**：读取项目根目录下的 `test.mp3`，将其转换为 Base64，发送给 Gemini API，并将结果保存到 `examples/llm-transcript-result.json`。
 - **配置**：需在 `.env` 中配置 `GEMINI_BASE_URL` (Gemini API 地址) 和 `GEMINI_FLASH_API_KEY`。
 - **使用方法**：
   ```bash
   pnpm run llm:transcript
   ```
 
-### 2) 前端调试工具 (`scripts/llm-transcript-debug.js`)
+### 2) 前端调试工具 (`scripts/llm/transcript-debug.js`)
 
 为了方便排查 API 请求封包、测试不同音频文件或在不带 Node 环境的浏览器中调试，提供了一个轻量级的 Web 调试页面。
 

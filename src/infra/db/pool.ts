@@ -13,4 +13,3 @@ export const pool = new Pool({ connectionString });
 export async function closePool(): Promise<void> {
   await pool.end();
 }
-

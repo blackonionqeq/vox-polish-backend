@@ -135,15 +135,15 @@ async function generateTranscriptRequest(params: {
     // try {
     //     result = JSON.parse(finalJsonStr);
     // } catch (e) {
-    //     console.error("Failed to parse final JSON. Raw output saved to error-response.txt");
-    //     fs.writeFileSync("./error-response.txt", finalJsonStr);
+    //     console.error("Failed to parse final JSON. Raw output saved to examples/error-response.txt");
+    //     fs.writeFileSync("./examples/error-response.txt", finalJsonStr);
     //     throw e;
     // }
 
 
 
     console.timeEnd("generateTranscriptRequest")
-    fs.writeFileSync("./llm-transcript-result.json", JSON.stringify(result, null, 2))
+    fs.writeFileSync("./examples/llm-transcript-result.json", JSON.stringify(result, null, 2))
 }
 
 generateTranscriptRequest({ model: defaultModel }).then(console.log).catch(console.error)

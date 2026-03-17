@@ -160,13 +160,13 @@ fastify.get("/", async (request, reply) => {
 
                 const body = JSON.stringify({ contents });
 
-                const url = \`\${baseUrl}/v1beta/models/\${model}:generateContent\`;
+                const url = `${baseUrl}/v1beta/models/${model}:generateContent`;
                 
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": \`Bearer \${apiKey}\`
+                        "Authorization": `Bearer ${apiKey}`
                     },
                     body
                 });

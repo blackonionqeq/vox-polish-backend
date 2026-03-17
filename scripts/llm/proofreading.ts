@@ -155,18 +155,18 @@ async function generateSrtByGemini(params: { model: string; transcript: Transcri
 
   const text = getGeminiTextParts(result);
   const srt = extractSrtFromText(text);
-  fs.writeFileSync("./test.srt", srt, "utf-8");
+  fs.writeFileSync("./examples/test.srt", srt, "utf-8");
 }
 
 async function main() {
   if (!GEMINI_BASE_URL) throw new Error("缺少 GEMINI_BASE_URL");
   if (!GEMINI_PRO_API_KEY) throw new Error("缺少 GEMINI_PRO_API_KEY");
 
-  const inputRaw = fs.readFileSync("./llm-transcript-result.json", "utf-8");
+  const inputRaw = fs.readFileSync("./examples/llm-transcript-result.json", "utf-8");
   const transcript = parseTranscriptPayloadFromFile(inputRaw);
 
   // 1) 覆盖写入：抽取到的 transcript JSON
-  fs.writeFileSync("./llm-proofreading-result.json", JSON.stringify(transcript, null, 2), "utf-8");
+  fs.writeFileSync("./examples/llm-proofreading-result.json", JSON.stringify(transcript, null, 2), "utf-8");
 
   // 2~3) 调用 Gemini Pro 润色并输出 SRT
   const fallbackModels = [defaultModel, ...googleProModels.filter((m) => m !== defaultModel)];

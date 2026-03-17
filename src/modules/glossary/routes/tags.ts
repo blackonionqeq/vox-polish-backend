@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 
-import { pool } from "../db/pool.js";
+import { pool } from "../../../infra/db/pool.js";
 
 type TagRow = {
   name: string;
@@ -21,4 +21,3 @@ export async function tagsRoutes(fastify: FastifyInstance): Promise<void> {
     return result.rows;
   });
 }
-
